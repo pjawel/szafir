@@ -14,6 +14,29 @@ import {
   X
 } from 'lucide-react';
 
+const FADE_UP = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 1.2, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  }
+};
+
+const STAGGER_CONTAINER = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
 const CATEGORIES = [
   { name: 'Wesela', icon: <Heart className="w-6 h-6" /> },
   { name: 'Urodziny', icon: <Cake className="w-6 h-6" /> },
@@ -37,13 +60,20 @@ function ImageGallery() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div className="columns-1 md:columns-2 lg:columns-3 gap-6 p-6 space-y-6">
+    <motion.div 
+      variants={STAGGER_CONTAINER}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+      className="columns-1 md:columns-2 lg:columns-3 gap-6 p-6 space-y-6"
+    >
       {IMAGES.map((src, index) => (
         <motion.div
           key={index}
-          whileHover={{ scale: 1.015 }}
+          variants={FADE_UP}
+          whileHover={{ scale: 1.015, y: -5 }}
           whileTap={{ scale: 0.985 }}
-          className="break-inside-avoid mb-6 cursor-pointer overflow-hidden rounded-2xl shadow-sm border border-accent-gold/15 bg-white ring-1 ring-accent-gold/5"
+          className="break-inside-avoid mb-6 cursor-pointer overflow-hidden rounded-2xl shadow-sm border border-accent-gold/15 bg-white ring-1 ring-accent-gold/5 transition-shadow hover:shadow-2xl"
           onClick={() => setSelectedImage(src)}
           id={`gallery-item-${index}`}
         >
@@ -87,7 +117,7 @@ function ImageGallery() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
@@ -95,11 +125,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-warm-bg font-serif text-ink overflow-x-hidden" id="main-container">
       {/* Navigation / Header */}
-      <nav className="max-w-7xl mx-auto px-4 py-6 border-b border-accent-gold/30 flex justify-between items-end">
+      <nav className="max-w-7xl mx-auto px-4 py-8 border-b border-accent-gold/30 flex justify-between items-end">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="text-4xl md:text-5xl font-light tracking-tight text-accent-blue">
             Sala Bankietowa <span className="italic font-semibold">Szafir</span>
@@ -110,15 +140,15 @@ export default function App() {
         </motion.div>
         <motion.div 
           className="hidden md:flex gap-4"
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <motion.a 
             href="#kontakt" 
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 py-2 bg-accent-blue text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all font-sans shadow-lg shadow-accent-blue/20"
+            className="px-8 py-2.5 bg-accent-blue text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all font-sans shadow-lg shadow-accent-blue/20"
           >
             Rezerwacja
           </motion.a>
@@ -136,19 +166,27 @@ export default function App() {
           />
         </div>
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.98, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative z-10 text-center px-4 bg-white/10 backdrop-blur-md p-12 rounded-[3rem] border border-white/30 shadow-2xl"
+          transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 text-center px-4 bg-white/5 backdrop-blur-xl p-16 rounded-[4rem] border border-white/20 shadow-2xl"
         >
-          <h2 className="text-4xl md:text-7xl font-light text-white mb-6 drop-shadow-2xl">
-            Elegancja w <span className="italic">Każdym Calu</span>
-          </h2>
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1.5 }}
+            className="text-4xl md:text-7xl font-light text-white mb-8 drop-shadow-2xl"
+          >
+            Elegancja w <span className="italic underline decoration-accent-gold/30 underline-offset-8">Każdym Calu</span>
+          </motion.h2>
           <div className="flex gap-4 justify-center">
             <motion.a 
               href="#oferta" 
-              whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)" }}
-              className="px-10 py-4 bg-white text-accent-blue rounded-full font-medium hover:bg-warm-bg transition-all shadow-xl font-sans text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 1 }}
+              whileHover={{ y: -8, boxShadow: "0 25px 30px -10px rgb(0 0 0 / 0.3)" }}
+              className="px-12 py-5 bg-white text-accent-blue rounded-full font-medium hover:bg-warm-bg transition-all shadow-2xl font-sans text-xl"
               id="cta-offer"
             >
               Nasza Oferta
@@ -161,27 +199,31 @@ export default function App() {
       <section className="py-24" id="oferta">
         <div className="max-w-7xl mx-auto px-4">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="flex items-center gap-4 mb-12"
+            variants={FADE_UP}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            className="flex items-center gap-4 mb-16"
           >
             <div className="h-[1px] flex-1 bg-accent-gold/30"></div>
-            <div className="text-center px-4">
-              <h2 className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-2 font-sans">Oferta</h2>
-              <h3 className="text-4xl font-light text-accent-blue italic">Organizujemy</h3>
+            <div className="text-center px-6">
+              <h2 className="text-sm uppercase tracking-[0.4em] text-muted-gold font-bold mb-3 font-sans">Oferta</h2>
+              <h3 className="text-5xl font-light text-accent-blue italic">Organizujemy</h3>
             </div>
             <div className="h-[1px] flex-1 bg-accent-gold/30"></div>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+          <motion.div 
+            variants={STAGGER_CONTAINER}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-5 gap-12"
+          >
             {CATEGORIES.map((cat, i) => (
               <motion.div 
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                variants={FADE_UP}
                 className="flex flex-col items-center text-center group"
                 id={`service-${cat.name.toLowerCase()}`}
               >
@@ -195,7 +237,7 @@ export default function App() {
                 <div className="w-0 h-[1px] bg-accent-gold mt-2 group-hover:w-12 transition-all duration-500" />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -216,99 +258,96 @@ export default function App() {
       </section>
 
       {/* Contact & Map Section */}
-      <section className="py-24" id="kontakt">
+      <section className="py-32" id="kontakt">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
-            <div id="contact-info" className="flex flex-col justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-stretch">
+            <motion.div 
+              variants={STAGGER_CONTAINER}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              id="contact-info" 
+              className="flex flex-col justify-between"
+            >
               <div>
                 <motion.h2 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                  variants={FADE_UP}
                   className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-4 font-sans italic border-l-4 border-accent-blue pl-4"
                 >
                   Kontakt
                 </motion.h2>
                 <motion.h3 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-5xl font-light text-accent-blue mb-12"
+                  variants={FADE_UP}
+                  className="text-5xl md:text-6xl font-light text-accent-blue mb-16 leading-tight"
                 >
                   Zapraszamy do Świata Szafiru
                 </motion.h3>
                 
-                <div className="space-y-10">
+                <div className="space-y-12">
                   <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="flex items-center gap-6 group"
+                    variants={FADE_UP}
+                    className="flex items-center gap-8 group"
                   >
-                    <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
-                      <Phone className="w-5 h-5" />
+                    <div className="w-14 h-14 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all duration-700 shadow-inner">
+                      <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">Telefon</p>
-                      <a href="tel:663174777" className="text-2xl font-light hover:text-accent-gold transition-colors tracking-tight">663 174 777</a>
+                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans font-bold">Telefon</p>
+                      <a href="tel:663174777" className="text-2xl md:text-3xl font-light hover:text-accent-gold transition-colors tracking-tight">663 174 777</a>
                     </div>
                   </motion.div>
 
                   <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="flex items-center gap-6 group"
+                    variants={FADE_UP}
+                    className="flex items-center gap-8 group"
                   >
-                    <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
-                      <Mail className="w-5 h-5" />
+                    <div className="w-14 h-14 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all duration-700 shadow-inner">
+                      <Mail className="w-6 h-6" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">E-mail</p>
-                      <a href="mailto:salabankietowaszafir@gmail.com" className="text-xl md:text-2xl font-light hover:text-accent-gold transition-colors tracking-tight break-all">salabankietowaszafir@gmail.com</a>
+                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans font-bold">E-mail</p>
+                      <a href="mailto:salabankietowaszafir@gmail.com" className="text-xl md:text-3xl font-light hover:text-accent-gold transition-colors tracking-tight break-all">salabankietowaszafir@gmail.com</a>
                     </div>
                   </motion.div>
 
                   <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    className="flex items-center gap-6 group"
+                    variants={FADE_UP}
+                    className="flex items-center gap-8 group"
                   >
-                    <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
-                      <MapPin className="w-5 h-5" />
+                    <div className="w-14 h-14 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all duration-700 shadow-inner">
+                      <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">Lokalizacja</p>
-                      <p className="text-2xl font-light tracking-tight">Kłucko Kolonia 41, 26-212 Kłucko</p>
+                      <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans font-bold">Lokalizacja</p>
+                      <p className="text-2xl md:text-3xl font-light tracking-tight italic">Kłucko Kolonia 41, 26-212 Kłucko</p>
                     </div>
                   </motion.div>
                 </div>
               </div>
 
-              <div className="mt-16 flex gap-4">
-                <a 
+              <motion.div variants={FADE_UP} className="mt-20 flex flex-wrap gap-6">
+                <motion.a 
                   href="https://www.facebook.com/profile.php?id=61574501228218" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-8 py-3 bg-[#0f3460] text-white rounded-full flex items-center gap-3 hover:scale-105 transition-all shadow-lg font-sans text-sm tracking-wider"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="px-10 py-4 bg-[#0f3460] text-white rounded-full flex items-center gap-4 hover:shadow-2xl transition-all shadow-lg font-sans text-sm tracking-wider font-semibold"
                   id="fb-link"
                 >
-                  <Facebook className="w-4 h-4" /> Facebook
-                </a>
-                <a 
+                  <Facebook className="w-5 h-5" /> Facebook
+                </motion.a>
+                <motion.a 
                   href="https://www.instagram.com/salabankietowa_szafir" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-8 py-3 bg-gradient-to-tr from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888] text-white rounded-full flex items-center gap-3 hover:scale-105 transition-all shadow-lg font-sans text-sm tracking-wider"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="px-10 py-4 bg-gradient-to-tr from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888] text-white rounded-full flex items-center gap-4 hover:shadow-2xl transition-all shadow-lg font-sans text-sm tracking-wider font-semibold"
                   id="ig-link"
                 >
-                  <Instagram className="w-4 h-4" /> Instagram
-                </a>
-              </div>
-            </div>
+                  <Instagram className="w-5 h-5" /> Instagram
+                </motion.a>
+              </motion.div>
+            </motion.div>
 
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
