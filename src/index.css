@@ -12,6 +12,10 @@
   --color-ink: #2c2c2c;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-warm-bg);
   color: var(--color-ink);
