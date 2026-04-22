@@ -96,22 +96,33 @@ export default function App() {
     <div className="min-h-screen bg-warm-bg font-serif text-ink overflow-x-hidden" id="main-container">
       {/* Navigation / Header */}
       <nav className="max-w-7xl mx-auto px-4 py-6 border-b border-accent-gold/30 flex justify-between items-end">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           <h1 className="text-4xl md:text-5xl font-light tracking-tight text-accent-blue">
             Sala Bankietowa <span className="italic font-semibold">Szafir</span>
           </h1>
           <p className="text-sm uppercase tracking-[0.2em] text-muted-gold mt-2 font-sans font-medium">
             Miejsce Twoich Wyjątkowych Wspomnień
           </p>
-        </div>
-        <div className="hidden md:flex gap-4">
-          <a 
+        </motion.div>
+        <motion.div 
+          className="hidden md:flex gap-4"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.a 
             href="#kontakt" 
-            className="px-6 py-2 bg-accent-blue text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all font-sans"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-2 bg-accent-blue text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all font-sans shadow-lg shadow-accent-blue/20"
           >
             Rezerwacja
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </nav>
 
       {/* Hero Section */}
@@ -125,22 +136,23 @@ export default function App() {
           />
         </div>
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2 }}
-          className="relative z-10 text-center px-4 bg-white/10 backdrop-blur-sm p-12 rounded-3xl border border-white/20"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="relative z-10 text-center px-4 bg-white/10 backdrop-blur-md p-12 rounded-[3rem] border border-white/30 shadow-2xl"
         >
-          <h2 className="text-4xl md:text-6xl font-light text-white mb-6 drop-shadow-lg">
+          <h2 className="text-4xl md:text-7xl font-light text-white mb-6 drop-shadow-2xl">
             Elegancja w <span className="italic">Każdym Calu</span>
           </h2>
           <div className="flex gap-4 justify-center">
-            <a 
+            <motion.a 
               href="#oferta" 
-              className="px-8 py-3 bg-white text-accent-blue rounded-full font-medium hover:bg-warm-bg transition-colors shadow-xl font-sans"
+              whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)" }}
+              className="px-10 py-4 bg-white text-accent-blue rounded-full font-medium hover:bg-warm-bg transition-all shadow-xl font-sans text-lg"
               id="cta-offer"
             >
               Nasza Oferta
-            </a>
+            </motion.a>
           </div>
         </motion.div>
       </header>
@@ -148,14 +160,19 @@ export default function App() {
       {/* Services Section */}
       <section className="py-24" id="oferta">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-4 mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="flex items-center gap-4 mb-12"
+          >
             <div className="h-[1px] flex-1 bg-accent-gold/30"></div>
             <div className="text-center px-4">
               <h2 className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-2 font-sans">Oferta</h2>
               <h3 className="text-4xl font-light text-accent-blue italic">Organizujemy</h3>
             </div>
             <div className="h-[1px] flex-1 bg-accent-gold/30"></div>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
             {CATEGORIES.map((cat, i) => (
@@ -168,10 +185,14 @@ export default function App() {
                 className="flex flex-col items-center text-center group"
                 id={`service-${cat.name.toLowerCase()}`}
               >
-                <div className="w-16 h-16 rounded-full border border-accent-gold/20 flex items-center justify-center text-accent-blue mb-6 group-hover:bg-accent-gold/10 transition-all font-light">
-                  {cat.icon}
+                <div className="w-16 h-16 rounded-full border border-accent-gold/20 flex items-center justify-center text-accent-blue mb-6 group-hover:bg-accent-blue group-hover:text-white group-hover:border-accent-blue transition-all duration-500 shadow-inner overflow-hidden relative">
+                  <motion.div
+                    className="absolute inset-0 bg-accent-blue/10 transform scale-0 group-hover:scale-100 transition-transform duration-500"
+                  />
+                  <div className="relative z-10">{cat.icon}</div>
                 </div>
-                <h4 className="text-xl font-medium text-ink">{cat.name}</h4>
+                <h4 className="text-xl font-medium text-ink group-hover:text-accent-blue transition-colors">{cat.name}</h4>
+                <div className="w-0 h-[1px] bg-accent-gold mt-2 group-hover:w-12 transition-all duration-500" />
               </motion.div>
             ))}
           </div>
@@ -181,10 +202,15 @@ export default function App() {
       {/* Gallery Section */}
       <section className="py-24 border-y border-accent-gold/20 bg-white/30" id="galeria">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-center mb-16"
+          >
             <h2 className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-2 font-sans">Inspiracje</h2>
             <h3 className="text-4xl font-light text-accent-blue">Sala Szafir</h3>
-          </div>
+          </motion.div>
           <ImageGallery />
         </div>
       </section>
@@ -195,11 +221,30 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
             <div id="contact-info" className="flex flex-col justify-between">
               <div>
-                <h2 className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-4 font-sans italic border-l-4 border-accent-blue pl-4">Kontakt</h2>
-                <h3 className="text-5xl font-light text-accent-blue mb-12">Zapraszamy do Świata Szafiru</h3>
+                <motion.h2 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="text-sm uppercase tracking-[0.3em] text-muted-gold font-bold mb-4 font-sans italic border-l-4 border-accent-blue pl-4"
+                >
+                  Kontakt
+                </motion.h2>
+                <motion.h3 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-5xl font-light text-accent-blue mb-12"
+                >
+                  Zapraszamy do Świata Szafiru
+                </motion.h3>
                 
                 <div className="space-y-10">
-                  <div className="flex items-center gap-6 group">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex items-center gap-6 group"
+                  >
                     <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
                       <Phone className="w-5 h-5" />
                     </div>
@@ -207,9 +252,15 @@ export default function App() {
                       <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">Telefon</p>
                       <a href="tel:663174777" className="text-2xl font-light hover:text-accent-gold transition-colors tracking-tight">663 174 777</a>
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div className="flex items-center gap-6 group">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="flex items-center gap-6 group"
+                  >
                     <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
                       <Mail className="w-5 h-5" />
                     </div>
@@ -217,9 +268,15 @@ export default function App() {
                       <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">E-mail</p>
                       <a href="mailto:salabankietowaszafir@gmail.com" className="text-xl md:text-2xl font-light hover:text-accent-gold transition-colors tracking-tight break-all">salabankietowaszafir@gmail.com</a>
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div className="flex items-center gap-6 group">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="flex items-center gap-6 group"
+                  >
                     <div className="w-12 h-12 flex items-center justify-center border border-accent-gold/40 rounded-full text-accent-blue group-hover:bg-accent-blue group-hover:text-white transition-all">
                       <MapPin className="w-5 h-5" />
                     </div>
@@ -227,7 +284,7 @@ export default function App() {
                       <p className="text-xs text-muted-gold uppercase tracking-widest mb-1 font-sans">Lokalizacja</p>
                       <p className="text-2xl font-light tracking-tight">Kłucko Kolonia 41, 26-212 Kłucko</p>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
 
@@ -253,7 +310,13 @@ export default function App() {
               </div>
             </div>
 
-            <div className="relative group" id="map-container">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="relative group" 
+              id="map-container"
+            >
               <div className="absolute -inset-4 border border-accent-gold/20 rounded-[2.5rem] pointer-events-none group-hover:border-accent-gold/40 transition-colors"></div>
               <div className="w-full h-full min-h-[450px] rounded-3xl overflow-hidden shadow-2xl relative z-10">
                 <iframe 
@@ -268,7 +331,7 @@ export default function App() {
                   className="min-h-[450px]"
                 ></iframe>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
